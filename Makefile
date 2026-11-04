@@ -36,7 +36,7 @@ help:
 	@echo
 	@echo "  Containers"
 	@echo "    make container-arm64"
-	@echo "      - Builds the container image for arm64."
+	@echo "      - Builds the container image for arm64, with a docker-loadable archive."
 	@echo "        Other MACHINES_CONTAINER: container-armv7, container-amd64"
 	@echo "    make containers"
 	@echo "      - Builds all of MACHINES_CONTAINER."
@@ -141,7 +141,7 @@ prereq:
 		desktop-file-utils chrpath u-boot-tools imagemagick zip \
 		python3-dev python3-setuptools \
 		cpio file lz4 zstd xz-utils locales iputils-ping socat \
-		python3-git python3-jinja2 python3-pexpect python3-subunit
+		python3-git python3-jinja2 python3-pexpect python3-subunit skopeo
 
 cortexa7hf-sdk: build/conf/bblayers.conf
 	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
@@ -176,6 +176,7 @@ swus-large: $(addsuffix -swu-large,$(MACHINES_LARGE))
 # builds the container image of one of MACHINES_CONTAINER
 $(MACHINES_CONTAINER): build/conf/bblayers.conf
 	export MACHINE=$@ && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image-container
+	./container_loadable.sh $@
 
 containers: $(MACHINES_CONTAINER)
 

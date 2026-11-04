@@ -250,11 +250,13 @@ make containers
 This builds container-amd64, container-arm64 and container-armv7;
 `make container-arm64` and the like build one of them.
 
-BitBake creates an OCI archive, `venus-container-<version>-oci.tar`, which is also
-what gets published. Docker and Podman load it as `container-gx:<version>`:
+BitBake creates an OCI archive, `venus-container-<version>-oci.tar`, which is
+what gets published. Docker's classic image store cannot load it, so the build
+also creates `venus-container-<machine>-loadable.tar`. Docker and Podman load
+that as `container-gx:<version>`:
 
 ```sh
-docker load -i deploy/venus/images/container-arm64/venus-container-v3.90-beta5-oci.tar
+docker load -i deploy/venus/images/container-arm64/venus-container-container-arm64-loadable.tar
 ```
 
 For details on using the container-GX image, see
